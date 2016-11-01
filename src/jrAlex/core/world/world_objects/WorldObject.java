@@ -1,7 +1,7 @@
 package jrAlex.core.world.world_objects;
 
 import jrAlex.core.world.Bound;
-import jrAlex.core.world.BoundContainer;
+import jrAlex.core.world.WorldObjectContainer;
 
 /**
  * Created by Alex on 10/28/2016.
@@ -9,11 +9,14 @@ import jrAlex.core.world.BoundContainer;
 
 public abstract class WorldObject extends Bound
 {
-	protected BoundContainer container;
+	protected WorldObjectContainer container;
+	protected boolean solid;
 
-	public WorldObject(int x, int y, int width, int height, BoundContainer container)
+	public WorldObject(int x, int y, int width, int height, boolean solid,
+	                   WorldObjectContainer container)
 	{
 		super(x, y, width, height);
+		this.solid = solid;
 		this.container = container;
 	}
 
@@ -21,13 +24,20 @@ public abstract class WorldObject extends Bound
 	{
 		if (container.isEmptyAt(new Bound(x + xOffset, y + yOffset, width, height)))
 		{
+			container.removeObjectAt(x, y);
 			super.translate(xOffset, yOffset);
+			container.addObjectAt(x, y, this);
 		}
 	}
 
 	public boolean canItGoThrough(WorldObject object)
 	{
+		return isSolid();
+	}
 
+	public boolean isSolid()
+	{
+		return solid;
 	}
 
 	public void rotate()
@@ -38,8 +48,14 @@ public abstract class WorldObject extends Bound
 		}
 	}
 
-	public BoundContainer getContainer()
+	public WorldObjectContainer getContainer()
 	{
 		return container;
+	}
+
+	@Override
+	public void update()
+	{
+		translate(1, 1);
 	}
 }

@@ -8,5 +8,5 @@ import java.awt.*;
 
 public interface Drawable
 {
-	void redraw(Graphics g, int s);
+	void redraw(Graphics g, int offX, int offY, int s);
 }

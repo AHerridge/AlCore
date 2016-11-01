@@ -1,9 +1,8 @@
 package jrAlex.core;
 
 import jrAlex.core.world.Area;
-import jrAlex.core.world.Bound;
 import jrAlex.core.world.World;
-import jrAlex.core.world.world_objects.animals.Animal;
+import jrAlex.core.world.world_objects.Entity;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,31 +17,18 @@ public class Test
 {
 	public static void main(String[] args)
 	{
-		final World world = new World(0, 0, 20, 20);
+		World world = new World(20, 20);
+		Area area = new Area(5, 5, 10, 10, world);
+		Entity entity = new Entity(1, 1, 2, 2, area);
 
-		final Area area = new Area(0, 0, 10, 10);
-
-		Animal animal1 = new Animal(3, 3, 2, 2, area)
-		{
-		};
-
-		area.addObject(animal1);
-
-		Animal animal2 = new Animal(0, 0, 3, 4, area)
-		{
-		};
-
-		area.addObject(animal2);
-
-		world.addObject(area);
-
-		System.out.println(area.getObjectsAt(new Bound(2, 2, 2, 2)));
+		world.addObjectAt(5, 5, area);
+		area.addObjectAt(1, 1, entity);
 
 		JFrame frame = new JFrame()
 		{
 			{
 				setFocusable(true);
-				setUndecorated(true);
+				//setUndecorated(true);
 				setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				setSize(320 * 2, 320 * 2);
 				setLocationRelativeTo(null);
@@ -94,10 +80,10 @@ public class Test
 						super.paintComponent(g);
 
 						Graphics2D g2d = (Graphics2D) g;
-						g2d.translate(getWidth() / 2 + xOff, getHeight() / 2 + yOff);
-						g2d.rotate(Math.toRadians(45));
+						//g2d.translate(getWidth() / 2 + xOff, getHeight() / 2 + yOff);
+						//g2d.rotate(Math.toRadians(45));
 
-						world.redraw(g, s);
+						world.redraw(g2d, 0, 0, s);
 					}
 				});
 				setVisible(true);

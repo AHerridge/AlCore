@@ -60,8 +60,8 @@ public class Bound extends Rectangle implements Updatable, Drawable
 	}
 
 	@Override
-	public void redraw(Graphics g, int s)
+	public void redraw(Graphics g, int offX, int offY, int s)
 	{
-		g.fillRect(x * s, y * s, width * s, height * s);
+		g.drawRect((x + offX) * s, (y + offY) * s, width * s, height * s);
 	}
 }

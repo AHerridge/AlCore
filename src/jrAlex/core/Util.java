@@ -3,6 +3,7 @@ package jrAlex.core;
 import org.jetbrains.annotations.Contract;
 
 import java.awt.*;
+import java.util.Iterator;
 
 /**
  * Created by Alex on 10/28/2016.

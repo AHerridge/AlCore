@@ -2,11 +2,12 @@ package jrAlex.core;
 
 import jrAlex.core.world.Area;
 import jrAlex.core.world.World;
-import jrAlex.core.world.world_objects.Entity;
+import jrAlex.core.world.world_objects.MovableWorldObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 /**
@@ -15,14 +16,14 @@ import java.awt.event.MouseMotionListener;
 
 public class Test
 {
-	public static void main(String[] args)
+	public static void main(String[] args) throws InterruptedException
 	{
 		World world = new World(20, 20);
 		Area area = new Area(5, 5, 10, 10, world);
-		Entity entity = new Entity(1, 1, 2, 2, area);
+		MovableWorldObject entity = new MovableWorldObject(1, 1, 2, 2, 3, area);
 
-		world.addObjectAt(5, 5, area);
-		area.addObjectAt(1, 1, entity);
+		world.addObject(area);
+		area.addObject(entity);
 
 		JFrame frame = new JFrame()
 		{
@@ -34,13 +35,50 @@ public class Test
 				setLocationRelativeTo(null);
 				this.add(new JPanel()
 				{
-					int xOff, yOff;
+					long lastUpdate = System.currentTimeMillis(), lastMove = System.currentTimeMillis();
+					boolean mouseOnScreen;
+					MouseEvent mouseEvent;
+					int xOff, yOff, range, speed = -1;
 					int s = 32;
 
 					{
 						setFocusable(true);
-						grabFocus();
 						setSize(320 * 2, 320 * 2);
+
+						range = getWidth() / 8;
+
+						this.addMouseListener(new MouseListener()
+						{
+							@Override
+							public void mouseClicked(MouseEvent e)
+							{
+
+							}
+
+							@Override
+							public void mousePressed(MouseEvent e)
+							{
+
+							}
+
+							@Override
+							public void mouseReleased(MouseEvent e)
+							{
+
+							}
+
+							@Override
+							public void mouseEntered(MouseEvent e)
+							{
+								mouseOnScreen = true;
+							}
+
+							@Override
+							public void mouseExited(MouseEvent e)
+							{
+								mouseOnScreen = false;
+							}
+						});
 
 						this.addMouseMotionListener(new MouseMotionListener()
 						{
@@ -53,23 +91,7 @@ public class Test
 							@Override
 							public void mouseMoved(MouseEvent e)
 							{
-								if (e.getX() > getWidth() - 20)
-								{
-									xOff += 4;
-								}
-								else if (e.getX() < 20)
-								{
-									xOff -= 4;
-								}
-
-								if (e.getY() > getHeight() - 20)
-								{
-									yOff += 4;
-								}
-								else if (e.getY() < 20)
-								{
-									yOff -= 4;
-								}
+								mouseEvent = e;
 							}
 						});
 					}
@@ -83,11 +105,49 @@ public class Test
 						//g2d.translate(getWidth() / 2 + xOff, getHeight() / 2 + yOff);
 						//g2d.rotate(Math.toRadians(45));
 
-						world.redraw(g2d, 0, 0, s);
+						if (System.currentTimeMillis() - lastUpdate >= 60)
+						{
+							world.update(System.currentTimeMillis() - lastUpdate);
+							lastUpdate = System.currentTimeMillis();
+						}
+						world.redraw(g2d, xOff, yOff, s);
+
+						if (mouseOnScreen)
+						{
+							if (System.currentTimeMillis() - lastMove >= 60)
+							{
+								if (mouseEvent.getX() > getWidth() - range)
+								{
+									xOff += speed;
+								}
+								else if (mouseEvent.getX() < range)
+								{
+									xOff -= speed;
+								}
+
+								if (mouseEvent.getY() > getHeight() - range)
+								{
+									yOff += speed;
+								}
+								else if (mouseEvent.getY() < range)
+								{
+									yOff -= speed;
+								}
+
+								lastMove = System.currentTimeMillis();
+							}
+						}
 					}
 				});
 				setVisible(true);
 			}
 		};
+
+		while (true)
+		{
+			Thread.sleep(16);
+
+			frame.repaint();
+		}
 	}
 }

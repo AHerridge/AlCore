@@ -6,5 +6,5 @@ package jrAlex.core.world;
 
 public interface Updatable
 {
-	void update();
+	void update(long delta);
 }

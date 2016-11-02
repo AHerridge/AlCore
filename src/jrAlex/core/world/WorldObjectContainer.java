@@ -16,7 +16,7 @@ public abstract class WorldObjectContainer<E extends WorldObject> extends WorldO
 		super(x, y, width, height, true, container);
 	}
 
-	public abstract void addObjectAt(int x, int y, E e);
+	public abstract void addObject(E e);
 
 	public abstract E getObjectAt(int x, int y);
 
@@ -26,13 +26,15 @@ public abstract class WorldObjectContainer<E extends WorldObject> extends WorldO
 
 	public abstract List<E> getObjects();
 
+	public abstract List<Point> getEmptyNeighborsOf(Bound b);
+
 	public List<E> removeObjectsAt(Bound b)
 	{
 		List<E> removedObjects = getObjectsAt(b);
 
 		for (E e : removedObjects)
 		{
-			removeObjectAt(e.x, e.y);
+			removeObjectAt((int) e.x, (int) e.y);
 		}
 
 		return removedObjects;
@@ -41,7 +43,7 @@ public abstract class WorldObjectContainer<E extends WorldObject> extends WorldO
 	public E setObjectAt(int x, int y, E e)
 	{
 		E oldObject = removeObjectAt(x, y);
-		addObjectAt(x, y, e);
+		addObject(e);
 		return oldObject;
 	}
 
@@ -50,28 +52,35 @@ public abstract class WorldObjectContainer<E extends WorldObject> extends WorldO
 		return getObjectAt(x, y) == null;
 	}
 
+	public List<E> getNeighborsOf(Bound b)
+	{
+		return getObjectsAt(new Bound(b.x - 1, b.y - 1, b.width + 1, b.height + 1));
+	}
+
 	public boolean isEmptyAt(Bound b)
 	{
-		return getObjectsAt(b).isEmpty();
+		List objects = getObjectsAt(b);
+		return objects != null && objects.isEmpty();
 	}
 
 	public boolean contains(Bound b)
 	{
-		return getBounds().contains(b);
+		return getRelativeBounds().contains(b);
 	}
 
-	public Bound getBounds()
+	public Bound getRelativeBounds()
 	{
 		return new Bound(0, 0, width, height);
 	}
 
 	@Override
-	public void update()
+	public void update(long delta)
 	{
-		super.update();
-		for (E e : getObjects())
+		super.update(delta);
+		List<? extends Bound> objects = getObjects();
+		for (int i = 0; i < objects.size(); i++)
 		{
-			e.update();
+			objects.get(i).update(delta);
 		}
 	}
 
@@ -81,7 +90,7 @@ public abstract class WorldObjectContainer<E extends WorldObject> extends WorldO
 		super.redraw(g, offX, offY, s);
 		for (E e : getObjects())
 		{
-			e.redraw(g, x + offX, y + offY, s);
+			e.redraw(g, (int) x + offX, (int) y + offY, s);
 		}
 	}
 }

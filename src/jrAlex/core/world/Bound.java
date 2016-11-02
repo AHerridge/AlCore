@@ -3,16 +3,25 @@ package jrAlex.core.world;
 import org.jetbrains.annotations.Contract;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Alex on 10/28/2016.
  */
 
-public class Bound extends Rectangle implements Updatable, Drawable
+public class Bound extends Rectangle2D.Double implements Updatable, Drawable
 {
-	public Bound(int x, int y, int width, int height)
+	public Bound(double x, double y, double w, double h)
 	{
-		super(x, y, width, height);
+		super(x, y, w, h);
+	}
+
+	public Bound(Point2D p)
+	{
+		super(p.getX(), p.getY(), 1, 1);
 	}
 
 	public double getDistanceTo(Bound b)
@@ -28,7 +37,7 @@ public class Bound extends Rectangle implements Updatable, Drawable
 
 	public void rotate()
 	{
-		int temp = height;
+		double temp = height;
 		height = width;
 		width = temp;
 	}
@@ -48,13 +57,45 @@ public class Bound extends Rectangle implements Updatable, Drawable
 		return (int) getMaxY() - 1;
 	}
 
+	public List<Point> asPoints()
+	{
+		List<Point> points = new LinkedList<>();
+
+		for (int y = getIMinY(); y < getIMaxY(); y++)
+		{
+			for (int x = getIMinX(); x < getIMaxX(); x++)
+			{
+				points.add(new Point(x, y));
+			}
+		}
+
+		return points;
+	}
+
 	public int getIMinY()
 	{
 		return (int) getMinY();
 	}
 
+	public void translate(double offX, double offY)
+	{
+		x += offX;
+		y += offY;
+	}
+
+	public void setLocation(double x, double y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+
+	public Point2D getLocation()
+	{
+		return new Point((int) x, (int) y);
+	}
+
 	@Override
-	public void update()
+	public void update(long delta)
 	{
 
 	}
@@ -62,6 +103,6 @@ public class Bound extends Rectangle implements Updatable, Drawable
 	@Override
 	public void redraw(Graphics g, int offX, int offY, int s)
 	{
-		g.drawRect((x + offX) * s, (y + offY) * s, width * s, height * s);
+		g.drawRect((int) (x + offX) * s, (int) (y + offY) * s, (int) width * s, (int) height * s);
 	}
 }

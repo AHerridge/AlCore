@@ -21,10 +21,8 @@ public class WorldObjectGrid<E extends WorldObject> extends WorldObjectContainer
 	}
 
 	@Override
-	public void addObjectAt(int x, int y, E e)
+	public void addObject(E e)
 	{
-		e.setLocation(x, y);
-
 		if (isEmptyAt(e))
 		{
 			for (int i = e.getIMinY(); i < e.getIMaxY(); i++)
@@ -94,7 +92,27 @@ public class WorldObjectGrid<E extends WorldObject> extends WorldObjectContainer
 	@Override
 	public List<E> getObjects()
 	{
-		return getObjectsAt(getBounds());
+		return getObjectsAt(getRelativeBounds());
+	}
+
+	@Override
+	public List<Point> getEmptyNeighborsOf(Bound b)
+	{
+		LinkedList<Point> emptyNeighbors = new LinkedList<>();
+
+		for (int i = b.getIMinY() - 1; i < b.getIMaxY() + 1; i++)
+		{
+			for (int j = b.getIMinX() - 1; j < b.getIMaxX() + 1; j++)
+			{
+				if (contains(j, i) && grid[i][j] == null)
+				{
+					emptyNeighbors.add(new Point(j, i));
+				}
+			}
+
+		}
+
+		return emptyNeighbors;
 	}
 }
 

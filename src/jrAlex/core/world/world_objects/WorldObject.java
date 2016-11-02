@@ -20,13 +20,14 @@ public abstract class WorldObject extends Bound
 		this.container = container;
 	}
 
-	public void translate(int xOffset, int yOffset)
+	@Override
+	public void translate(double xOffset, double yOffset)
 	{
 		if (container.isEmptyAt(new Bound(x + xOffset, y + yOffset, width, height)))
 		{
-			container.removeObjectAt(x, y);
+			container.removeObjectAt((int) x, (int) y);
 			super.translate(xOffset, yOffset);
-			container.addObjectAt(x, y, this);
+			container.addObject(this);
 		}
 	}
 
@@ -51,11 +52,5 @@ public abstract class WorldObject extends Bound
 	public WorldObjectContainer getContainer()
 	{
 		return container;
-	}
-
-	@Override
-	public void update()
-	{
-		translate(1, 1);
 	}
 }

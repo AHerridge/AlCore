@@ -23,10 +23,8 @@ public class DoubleWorldObjectContainer<E extends WorldObject> extends WorldObje
 	}
 
 	@Override
-	public void addObjectAt(int x, int y, E e)
+	public void addObject(E e)
 	{
-		e.setLocation(x, y);
-
 		if (isEmptyAt(e))
 		{
 			array.add(e);
@@ -44,29 +42,55 @@ public class DoubleWorldObjectContainer<E extends WorldObject> extends WorldObje
 	@Override
 	public E getObjectAt(int x, int y)
 	{
-		return grid[y][x].getParent();
+		if (contains(x, y) && grid[y][x] != null)
+		{
+			return grid[y][x].getParent();
+		}
+
+		return null;
 	}
 
 	@Override
 	public List<E> getObjectsAt(Bound b)
 	{
-		LinkedList<E> foundObjects = new LinkedList<>();
 
 		if (contains(b))
 		{
+			LinkedList<E> foundObjects = new LinkedList<>();
 			for (int i = b.getIMinY(); i < b.getIMaxY(); i++)
 			{
 				for (int j = b.getIMinX(); j < b.getIMaxX(); j++)
 				{
-					if (grid[i][j] != null)
+					if (getObjectAt(j, i) != null && !foundObjects.contains(grid[i][j].getParent()))
 					{
 						foundObjects.add(grid[i][j].getParent());
 					}
 				}
 			}
+			return foundObjects;
 		}
 
-		return foundObjects;
+		return null;
+	}
+
+	@Override
+	public List<Point> getEmptyNeighborsOf(Bound b)
+	{
+		LinkedList<Point> emptyNeighbors = new LinkedList<>();
+
+		for (int i = b.getIMinY() - 1; i < b.getIMaxY() + 1; i++)
+		{
+			for (int j = b.getIMinX() - 1; j < b.getIMaxX() + 1; j++)
+			{
+				if (contains(j, i) && grid[i][j] == null)
+				{
+					emptyNeighbors.add(new Point(j, i));
+				}
+			}
+
+		}
+
+		return emptyNeighbors;
 	}
 
 	@Override
@@ -76,13 +100,16 @@ public class DoubleWorldObjectContainer<E extends WorldObject> extends WorldObje
 		{
 			E oldObject = getObjectAt(x, y);
 
-			array.remove(oldObject);
-
-			for (int i = oldObject.getIMinY(); i < oldObject.getIMaxY(); i++)
+			if (oldObject != null)
 			{
-				for (int j = oldObject.getIMinX(); j < oldObject.getIMaxX(); j++)
+				array.remove(oldObject);
+
+				for (int i = oldObject.getIMinY(); i < oldObject.getIMaxY(); i++)
 				{
-					grid[i][j] = null;
+					for (int j = oldObject.getIMinX(); j < oldObject.getIMaxX(); j++)
+					{
+						grid[i][j] = null;
+					}
 				}
 			}
 

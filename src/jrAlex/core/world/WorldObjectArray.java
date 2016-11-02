@@ -2,6 +2,7 @@ package jrAlex.core.world;
 
 import jrAlex.core.world.world_objects.WorldObject;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,9 +21,8 @@ public class WorldObjectArray<E extends WorldObject> extends WorldObjectContaine
 	}
 
 	@Override
-	public void addObjectAt(int x, int y, E e)
+	public void addObject(E e)
 	{
-		e.setLocation(x, y);
 		array.add(e);
 	}
 
@@ -78,5 +78,24 @@ public class WorldObjectArray<E extends WorldObject> extends WorldObjectContaine
 	public List<E> getObjects()
 	{
 		return array;
+	}
+
+	@Override
+	public List<Point> getEmptyNeighborsOf(Bound b)
+	{
+		List<Point> emptyNeighbors = asPoints();
+
+		for (E e : array)
+		{
+			for (int i = 0; i < emptyNeighbors.size(); i++)
+			{
+				if (e.contains(emptyNeighbors.get(i)))
+				{
+					emptyNeighbors.remove(i);
+				}
+			}
+		}
+
+		return emptyNeighbors;
 	}
 }

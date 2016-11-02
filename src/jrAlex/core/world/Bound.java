@@ -103,6 +103,6 @@ public class Bound extends Rectangle2D.Double implements Updatable, Drawable
 	@Override
 	public void redraw(Graphics g, int offX, int offY, int s)
 	{
-		g.drawRect((int) (x + offX) * s, (int) (y + offY) * s, (int) width * s, (int) height * s);
+		g.drawRect((int) ((x + offX) * s), (int) ((y + offY) * s), (int) width * s, (int) height * s);
 	}
 }

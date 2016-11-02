@@ -13,7 +13,7 @@ public abstract class WorldObjectContainer<E extends WorldObject> extends WorldO
 {
 	public WorldObjectContainer(int x, int y, int width, int height, WorldObjectContainer container)
 	{
-		super(x, y, width, height, true, container);
+		super(x, y, width, height, true, container);// multiply w and h by window scale
 	}
 
 	public abstract void addObject(E e);

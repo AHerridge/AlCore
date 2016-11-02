@@ -18,9 +18,9 @@ public class Test
 {
 	public static void main(String[] args) throws InterruptedException
 	{
-		World world = new World(20, 20);
+		final World world = new World(20, 20);
 		Area area = new Area(5, 5, 10, 10, world);
-		MovableWorldObject entity = new MovableWorldObject(1, 1, 2, 2, 3, area);
+		MovableWorldObject entity = new MovableWorldObject(1, 1, 2, 2, 1, area);
 
 		world.addObject(area);
 		area.addObject(entity);
@@ -108,13 +108,13 @@ public class Test
 						if (System.currentTimeMillis() - lastUpdate >= 60)
 						{
 							world.update(System.currentTimeMillis() - lastUpdate);
-							lastUpdate = System.currentTimeMillis();
+							lastUpdate = System.currentTimeMillis() + (System.currentTimeMillis() - lastUpdate);
 						}
 						world.redraw(g2d, xOff, yOff, s);
 
-						if (mouseOnScreen)
+						if (mouseOnScreen && mouseEvent != null)
 						{
-							if (System.currentTimeMillis() - lastMove >= 60)
+							if (System.currentTimeMillis() - lastMove >= 50)
 							{
 								if (mouseEvent.getX() > getWidth() - range)
 								{

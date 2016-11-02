@@ -17,11 +17,11 @@ public class MovableWorldObject extends WorldObject
 {
 	private int speed;
 
-	public MovableWorldObject(int x, int y, int width, int height, int speedPerMilli,
+	public MovableWorldObject(int x, int y, int width, int height, int speedPerSecond,
 	                          WorldObjectContainer<? extends WorldObject> container)
 	{
 		super(x, y, width, height, true, container);
-		this.speed = speedPerMilli;
+		this.speed = speedPerSecond;
 	}
 
 	public List<PathNode> getPathTo(int destX, int destY)
@@ -66,7 +66,7 @@ public class MovableWorldObject extends WorldObject
 	@Override
 	public void update(long delta)
 	{
-		translate(speed / 1000.0 * delta, speed * delta / 1000.0);
+		translate(speed * delta / 1000.0 , speed * delta / 1000.0); // Multiply offX and offY by scale
 	}
 }
 

@@ -7,7 +7,7 @@ import jrAlex.core.world.WorldObjectContainer;
  * Created by Alex on 10/28/2016.
  */
 
-public abstract class WorldObject extends Bound
+public class WorldObject extends Bound
 {
 	protected WorldObjectContainer container;
 	protected boolean solid;

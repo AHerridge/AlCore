@@ -66,7 +66,7 @@ public class MovableWorldObject extends WorldObject
 	@Override
 	public void update(long delta)
 	{
-		translate(speed * delta / 1000.0 , speed * delta / 1000.0); // Multiply offX and offY by scale
+		translate(speed * delta / 1000.0 , speed * delta / 1000.0); // TODO Multiply offX and offY by scale
 	}
 }
 

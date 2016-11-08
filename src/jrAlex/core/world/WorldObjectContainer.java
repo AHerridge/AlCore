@@ -85,7 +85,7 @@ public abstract class WorldObjectContainer<E extends WorldObject> extends WorldO
 	}
 
 	@Override
-	public void redraw(Graphics g, int offX, int offY, int s)
+	public void redraw(Graphics g, int offX, int offY, double s)
 	{
 		super.redraw(g, offX, offY, s);
 		for (E e : getObjects())

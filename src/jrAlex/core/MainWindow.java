@@ -13,8 +13,8 @@ import java.awt.event.MouseMotionListener;
  */
 public class MainWindow extends JFrame implements Scalable
 {
+	private final MainWindow instance = new MainWindow(640, 640, 1);
 	private View view;
-	private MainWindow instance;
 	private double scale;
 
 	private MainWindow(int width, int height, double scale)

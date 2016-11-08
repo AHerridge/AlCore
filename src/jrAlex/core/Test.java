@@ -25,6 +25,8 @@ public class Test
 		world.addObject(area);
 		area.addObject(entity);
 
+		System.out.println((int)2.99999);
+
 		JFrame frame = new JFrame()
 		{
 			{

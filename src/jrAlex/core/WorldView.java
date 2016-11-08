@@ -7,6 +7,13 @@ import java.awt.*;
  */
 public class WorldView extends View
 {
+	private double scale;
+
+	public WorldView(double scale)
+	{
+		super(scale);
+	}
+
 	@Override
 	public void update(long delta)
 	{
